@@ -32,6 +32,9 @@ public class BlockController {
     @Autowired
     private UniversityRepository universityRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @GetMapping("/")
     public String Main(Model model){
         return "Home";
@@ -86,8 +89,8 @@ public class BlockController {
 
     @GetMapping("/univer/add")
     public String univerAdd(University university, Model model){
-        model.addAttribute("adddress", addressRepository.findAll());
-        System.out.println(addressRepository.findAll().iterator().next().getAddreses());
+        Iterable<Address> addresses = addressRepository.findAll();
+        model.addAttribute("addresses", addresses);
         return "university-add";
     }
     @GetMapping("/adress/add")
@@ -96,15 +99,13 @@ public class BlockController {
     }
 
     @PostMapping("/univer/add")
-    public String univerAdd(@ModelAttribute("university")@Validated University university, BindingResult bindingResult,
-                            @RequestParam Long adress_id, Model model){
-        model.addAttribute("adddress", addressRepository.findAll());
+    public String univerAdd(@ModelAttribute("university")@Validated University university,
+                            BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
+            Iterable<Address> addresses = addressRepository.findAll();
+            model.addAttribute("addresses", addresses);
             return "university-add";
         }
-        Address address;
-        address = addressRepository.findById(adress_id).get();
-        university.setAddress(address);
         universityRepository.save(university);
         return "redirect:/univer";
     }
@@ -231,20 +232,21 @@ public class BlockController {
     @GetMapping("/univer/{id}/edit")
     public String univerEdit(@PathVariable("id") long id, Model model){
         University res = universityRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Неверный id: "+id));
-        model.addAttribute("addresses", addressRepository.findAll());
+        Iterable<Address> addresses = addressRepository.findAll();
+        model.addAttribute("addresses", addresses);
         model.addAttribute("univer", res);
         return "university-edit";
     }
     @PostMapping("/univer/{id}/edit")
-    public String univerUpdate(@PathVariable("id") long id, @ModelAttribute("address")@Validated University university, BindingResult bindingResult,
-                                @RequestParam Long addresss_id, Model model){
+    public String univerUpdate(@PathVariable("id") long id, @ModelAttribute("address")@Validated University university,
+                               BindingResult bindingResult, Model model){
         university.setId(id);
         if(bindingResult.hasErrors()){
+            Iterable<Address> addresses = addressRepository.findAll();
+            model.addAttribute("addresses", addresses);
             return "university-edit";
         }
-        Address address;
-        address = addressRepository.findById(addresss_id).get();
-        university.setAddress(address);
+
         universityRepository.save(university);
         return "redirect:/univer";
     }

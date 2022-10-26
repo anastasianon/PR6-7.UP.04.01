@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Home</title>
@@ -8,6 +9,11 @@
 
 <div th:insert="/blocks/Header"></div>
 <div align="center">
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">
+            Выйти из учетной записи
+        </button>
+    </form>
 <h1>Меню</h1>
 <a href="/block/">Статьи</a>
 <a href="/student/">Студенты</a>
@@ -15,6 +21,7 @@
 <a href="/univer/">Университеты</a><br><br><br>
 <a href="/adress/">Адрес</a><br><br><br>
 <a href="/su/">Прикрепить студента к универу</a>
+<a href="/admin">Пользователи</a>
 </div>
 </body>
 </html>

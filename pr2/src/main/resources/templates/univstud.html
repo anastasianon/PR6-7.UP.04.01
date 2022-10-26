@@ -5,9 +5,8 @@
   <title>Студента в колледж</title>
 </head>
 <body>
-<h1>Добавление студента в колледж</h1>
+<h1>Добавление студента в университет</h1>
 <a href="/su/add" style="font-size: 20px">Переход к добавлению</a>
-<h1>Колледжи</h1>
 <div th:each="el : ${students}">
   <h3 th:text="${'Фамилия: '+el.getSurname()}" style="display: inline-block"></h3>
   <h4 th:text="${'Универы: '+el.getUniversityList()}"></h4>
